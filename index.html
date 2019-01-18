@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+</head>
+  <body>
+      <canvas id="myChart"></canvas>
+  </body>
+</html>
+<script src="https://www.gstatic.com/firebasejs/5.8.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC2TqvMDSqz4exNs9HaOmIE3vdqcefAtHw",
+    authDomain: "jsfinal2018.firebaseapp.com",
+    databaseURL: "https://jsfinal2018.firebaseio.com",
+    projectId: "jsfinal2018",
+    storageBucket: "jsfinal2018.appspot.com",
+    messagingSenderId: "896703232076"
+  };
+  firebase.initializeApp(config);
+
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  firebase.database().ref("statistic").once('value').then(function(snapshot){
+    var data = snapshot.val();
+    var label = [];
+    var value = [];
+    var color = [];
+
+    for(var i in data){
+      label.push(i);
+      value.push(data[i]);
+      color.push(getRandomColor());
+    }
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: label,
+            datasets: [{
+                label: 'click of bus',
+                data: value,
+                backgroundColor:color,
+                borderWidth: 2
+            }]
+        },
+    });
+  });
+
+
+</script>
+
